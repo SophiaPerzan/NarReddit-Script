@@ -1,0 +1,10 @@
+certifi==2023.5.7
+charset-normalizer==3.1.0
+idna==3.4
+praw==7.7.0
+prawcore==2.3.0
+python-dotenv==1.0.0
+requests==2.31.0
+update-checker==0.18.0
+urllib3==2.0.2
+websocket-client==1.5.2
