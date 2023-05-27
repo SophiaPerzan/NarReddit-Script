@@ -14,11 +14,11 @@ class Scraper:
     
     def getHotPosts(self):
         for post in self.subreddit.hot():
-            if not post.stickied and post.is_self and len(post.selftext) > 2000 and len(self.hotPosts) < 2:
+            if not post.stickied and post.is_self and len(post.selftext) < 1100 and len(self.hotPosts) < 2:
                 self.hotPosts.append(post)
             if len(self.hotPosts) >= 2:
                 break
             
         self.hotPosts = self.hotPosts[:1]
         post = self.hotPosts[0]
-        return post.title+" "+post.selftext
+        return (post.title, post.title+"\n"+post.selftext)
