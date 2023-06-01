@@ -28,3 +28,4 @@ update-checker==0.18.0
 urllib3==2.0.2
 wcwidth==0.2.6
 websocket-client==1.5.2
+ffmpeg-python==0.2.0
