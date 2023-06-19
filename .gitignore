@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 background-videos/*
 output/*
+tts-audio-files/*
