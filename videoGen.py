@@ -16,9 +16,6 @@ class VideoGenerator:
             print(f"Audio file not found: {ttsAudioPath}")
             return False
 
-        video = ffmpeg.input(backgroundVideoPath)
-        audio = ffmpeg.input(ttsAudioPath)
-
         # Get the duration of the audio file
         probe = ffmpeg.probe(ttsAudioPath)
         audio_duration = float(probe['streams'][0]['duration'])+2
@@ -47,9 +44,14 @@ class VideoGenerator:
             new_width = width
             new_height = int(width * (16 / 9))
 
-        # Trim and crop the video to match the length of the audio and the desired aspect ratio
-        video = ffmpeg.filter_(video, 'trim', start_time,
-                               start_time + audio_duration)
+        video = ffmpeg.input(backgroundVideoPath)
+        audio = ffmpeg.input(ttsAudioPath)
+
+        # Trim the video to match the length of the audio
+        video = video.trim(start=start_time, end=start_time + audio_duration)
+        video = video.setpts('PTS-STARTPTS')
+
+        # Crop the video to the desired aspect ratio
         video = ffmpeg.filter_(video, 'crop', new_width, new_height)
 
         # Merge the video and audio together, and output to output_path

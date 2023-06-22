@@ -26,6 +26,8 @@ videoGen = VideoGenerator(env)
 outputPath = os.path.join('output', 'output.mp4')
 bgVideoPath = os.path.join('background-videos', env['BG_VIDEO_FILENAME'])
 videoFile = videoGen.generateVideo(
-    bgVideoPath, 'tts-audio-files/speech.mp3', 'output/output.mp4')
+    bgVideoPath, audioFile, outputPath)
 if (videoFile != False):
     print("Created output video file at: " + videoFile)
+else:
+    print("Failed to create output video file")
