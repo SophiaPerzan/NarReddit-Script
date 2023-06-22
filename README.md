@@ -30,3 +30,4 @@ TODO:
 * Automated creation of subtitles to be added to the video
 * Picking a random background video from a library
 * Ability for background videos to be shorter than the narration
+* Use GPT-4 for translation of content to other languages
