@@ -24,7 +24,10 @@ print("Created audio file: " + audioFile)
 
 videoGen = VideoGenerator(env)
 outputPath = os.path.join('output', 'output.mp4')
+bgVideoPath = os.path.join('background-videos', env['BG_VIDEO_FILENAME'])
 videoFile = videoGen.generateVideo(
-    'background-videos/MCParkour.mp4', audioFile, outputPath)
+    bgVideoPath, audioFile, outputPath)
 if (videoFile != False):
     print("Created output video file at: " + videoFile)
+else:
+    print("Failed to create output video file")

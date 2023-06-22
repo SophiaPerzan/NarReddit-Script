@@ -22,9 +22,11 @@ Paste your elevenlabs api key into the .env file
 Paste your OpenAI API key in the .env file and set whether or not you want to use GPT-4
 * NOTE: You will need an API key with access to gpt-4 in order to use it. Expect higher api costs if doing so.
 
+Set the filename of the background video you want to use in the BG_VIDEO_FILENAME field of the .env file
+
 Run the script
 
 TODO:
 * Automated creation of subtitles to be added to the video
-* Randomize start play location for background video/picking a random background video from a library
+* Picking a random background video from a library
 * Ability for background videos to be shorter than the narration
