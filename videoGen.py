@@ -22,8 +22,24 @@ class VideoGenerator:
         probe = ffmpeg.probe(ttsAudioPath)
         audio_duration = float(probe['streams'][0]['duration'])+2
 
-        # Trim the video to match the length of the audio
+        # Get the video's dimensions
+        probe = ffmpeg.probe(backgroundVideoPath)
+        video_stream = next(
+            (stream for stream in probe['streams'] if stream['codec_type'] == 'video'), None)
+        width = int(video_stream['width'])
+        height = int(video_stream['height'])
+
+        # Calculate the dimensions for the 9:16 aspect ratio crop
+        if width / height > 9 / 16:  # wider than 9:16, crop sides
+            new_width = int(height * (9 / 16))
+            new_height = height
+        else:  # narrower than 9:16, crop top and bottom
+            new_width = width
+            new_height = int(width * (16 / 9))
+
+        # Trim and crop the video to match the length of the audio and the desired aspect ratio
         video = ffmpeg.filter_(video, 'trim', duration=audio_duration)
+        video = ffmpeg.filter_(video, 'crop', new_width, new_height)
 
         # Merge the video and audio together, and output to output_path
         output = ffmpeg.output(video, audio, outputVideoPath)
