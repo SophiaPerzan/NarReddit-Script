@@ -26,5 +26,5 @@ Run the script
 
 TODO:
 * Automated creation of subtitles to be added to the video
-* Randomize start play location for background video/picking a random background video from a library
+* Picking a random background video from a library
 * Ability for background videos to be shorter than the narration
