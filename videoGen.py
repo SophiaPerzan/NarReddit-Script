@@ -1,5 +1,6 @@
 import ffmpeg
 import os
+import random
 
 
 class VideoGenerator:
@@ -28,6 +29,15 @@ class VideoGenerator:
             (stream for stream in probe['streams'] if stream['codec_type'] == 'video'), None)
         width = int(video_stream['width'])
         height = int(video_stream['height'])
+        video_duration = float(video_stream['duration'])
+
+        # Make sure the video is long enough
+        if video_duration < audio_duration:
+            print(f"The video is not long enough for the audio narration")
+            return False
+
+        # Choose a random start time
+        start_time = random.uniform(0, video_duration - audio_duration)
 
         # Calculate the dimensions for the 9:16 aspect ratio crop
         if width / height > 9 / 16:  # wider than 9:16, crop sides
@@ -38,7 +48,8 @@ class VideoGenerator:
             new_height = int(width * (16 / 9))
 
         # Trim and crop the video to match the length of the audio and the desired aspect ratio
-        video = ffmpeg.filter_(video, 'trim', duration=audio_duration)
+        video = ffmpeg.filter_(video, 'trim', start_time,
+                               start_time + audio_duration)
         video = ffmpeg.filter_(video, 'crop', new_width, new_height)
 
         # Merge the video and audio together, and output to output_path
