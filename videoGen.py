@@ -28,11 +28,6 @@ class VideoGenerator:
         height = int(video_stream['height'])
         video_duration = float(video_stream['duration'])
 
-        # Make sure the video is long enough
-        if video_duration < audio_duration:
-            print(f"The video is not long enough for the audio narration")
-            return False
-
         # Choose a random start time
         start_time = random.uniform(0, video_duration - audio_duration)
 
@@ -45,6 +40,13 @@ class VideoGenerator:
             new_height = int(width * (16 / 9))
 
         video = ffmpeg.input(backgroundVideoPath)
+
+        # Loop the video if it is shorter than the audio
+        if video_duration < audio_duration:
+            loops_needed = int(audio_duration // video_duration)
+            video = video.output('pipe:', format='rawvideo',
+                                 pix_fmt='rgb24').stream_loop(loops_needed)
+
         audio = ffmpeg.input(ttsAudioPath)
 
         # Trim the video to match the length of the audio
