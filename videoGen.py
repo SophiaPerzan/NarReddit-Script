@@ -28,8 +28,10 @@ class VideoGenerator:
         height = int(video_stream['height'])
         video_duration = float(video_stream['duration'])
 
-        # Choose a random start time
-        start_time = random.uniform(0, video_duration - audio_duration)
+        # Choose a random start time if possible
+        start_time = 0
+        if video_duration > audio_duration:
+            start_time = random.uniform(0, video_duration - audio_duration)
 
         # Calculate the dimensions for the 9:16 aspect ratio crop
         if width / height > 9 / 16:  # wider than 9:16, crop sides
@@ -43,9 +45,11 @@ class VideoGenerator:
 
         # Loop the video if it is shorter than the audio
         if video_duration < audio_duration:
-            loops_needed = int(audio_duration // video_duration)
-            video = video.output('pipe:', format='rawvideo',
-                                 pix_fmt='rgb24').stream_loop(loops_needed)
+            loops_needed = int(audio_duration // video_duration) + 1
+            videos = []
+            for i in range(loops_needed):
+                videos.append(video)
+            video = ffmpeg.concat(*videos, v=1, a=0)
 
         audio = ffmpeg.input(ttsAudioPath)
 
