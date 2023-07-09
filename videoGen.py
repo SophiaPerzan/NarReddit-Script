@@ -88,7 +88,10 @@ class VideoGenerator:
         return video
 
     def mergeAudioVideo(self, video, audio, outputVideoPath):
-        output = ffmpeg.output(video, audio, outputVideoPath)
+        vcodec = self.env['VCODEC']
+        numThreads = self.env['THREADS']
+        output = ffmpeg.output(video, audio, outputVideoPath,
+                               vcodec=vcodec, threads=numThreads)
         output = ffmpeg.overwrite_output(output)
         ffmpeg.run(output)
 
