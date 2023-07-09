@@ -32,9 +32,10 @@ class VideoGenerator:
         height = int(video_stream['height'])
         video_duration = float(video_stream['duration'])
 
-        # Choose a random start time if possible
+        # Choose a random start time if possible and desired
         start_time = 0
-        if video_duration > audio_duration:
+        randomizeStart = self.env['RANDOM_START_TIME'].upper() == 'TRUE'
+        if video_duration > audio_duration and randomizeStart:
             start_time = random.uniform(0, video_duration - audio_duration)
 
         # Calculate the dimensions for the 9:16 aspect ratio crop
