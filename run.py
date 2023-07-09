@@ -23,10 +23,11 @@ audioFile = tts.createAudio(editedPost, gender)
 print("Created audio file: " + audioFile)
 
 videoGen = VideoGenerator(env)
+directory = 'background-videos'
 outputPath = os.path.join('output', 'output.mp4')
-bgVideoPath = os.path.join('background-videos', env['BG_VIDEO_FILENAME'])
+bgVideoFileName = env['BG_VIDEO_FILENAME']
 videoFile = videoGen.generateVideo(
-    bgVideoPath, audioFile, outputPath)
+    bgVideoFileName, audioFile, outputPath, directory)
 if (videoFile != False):
     print("Created output video file at: " + videoFile)
 else:
