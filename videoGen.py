@@ -7,66 +7,100 @@ class VideoGenerator:
     def __init__(self, env):
         self.env = env
 
-    def generateVideo(self, backgroundVideoPath, ttsAudioPath, outputVideoPath):
+    def generateVideo(self, backgroundVideoFileName, ttsAudioPath, outputVideoPath, directory):
+        backgroundVideoPath = self.getBackgroundVideoPath(
+            backgroundVideoFileName, directory)
 
         if not os.path.isfile(backgroundVideoPath):
             print(f"Video file not found: {backgroundVideoPath}")
             return False
+
         if not os.path.isfile(ttsAudioPath):
             print(f"Audio file not found: {ttsAudioPath}")
             return False
 
-        # Get the duration of the audio file
+        audioDuration = self.getAudioDuration(ttsAudioPath)
+        videoProbe = ffmpeg.probe(backgroundVideoPath)
+        videoStream = self.getVideoStream(videoProbe)
+        videoDuration = float(videoStream['duration'])
+
+        startTime = self.getStartTime(audioDuration, videoDuration)
+
+        # Calculate new dimensions only when necessary
+        newWidth, newHeight = None, None
+        if videoStream['width'] != 9 or videoStream['height'] != 16:
+            newWidth, newHeight = self.getNewDimensions(videoStream)
+
+        video = self.processVideo(
+            backgroundVideoPath, videoDuration, audioDuration, startTime, newWidth, newHeight)
+        audio = ffmpeg.input(ttsAudioPath)
+
+        self.mergeAudioVideo(video, audio, outputVideoPath)
+
+        return outputVideoPath
+
+    def getBackgroundVideoPath(self, backgroundVideoFileName, directory):
+        if backgroundVideoFileName.upper() == 'RANDOM':
+            return self.getRandomMP4(directory)
+        else:
+            return os.path.join(directory, self.env['BG_VIDEO_FILENAME'])
+
+    def getAudioDuration(self, ttsAudioPath):
         probe = ffmpeg.probe(ttsAudioPath)
-        audio_duration = float(probe['streams'][0]['duration'])+2
+        return float(probe['streams'][0]['duration'])+2
 
-        # Get the video's dimensions
-        probe = ffmpeg.probe(backgroundVideoPath)
-        video_stream = next(
-            (stream for stream in probe['streams'] if stream['codec_type'] == 'video'), None)
-        width = int(video_stream['width'])
-        height = int(video_stream['height'])
-        video_duration = float(video_stream['duration'])
+    def getVideoStream(self, videoProbe):
+        return next((stream for stream in videoProbe['streams'] if stream['codec_type'] == 'video'), None)
 
-        # Choose a random start time if possible
-        start_time = 0
-        if video_duration > audio_duration:
-            start_time = random.uniform(0, video_duration - audio_duration)
+    def getStartTime(self, audioDuration, videoDuration):
+        randomizeStart = self.env['RANDOM_START_TIME'].upper() == 'TRUE'
+        if videoDuration > audioDuration and randomizeStart:
+            return random.uniform(0, videoDuration - audioDuration)
+        else:
+            return 0
 
-        # Calculate the dimensions for the 9:16 aspect ratio crop
+    def getNewDimensions(self, videoStream):
+        width = int(videoStream['width'])
+        height = int(videoStream['height'])
+
         if width / height > 9 / 16:  # wider than 9:16, crop sides
-            new_width = int(height * (9 / 16))
-            new_height = height
+            return int(height * (9 / 16)), height
         else:  # narrower than 9:16, crop top and bottom
-            new_width = width
-            new_height = int(width * (16 / 9))
+            return width, int(width * (16 / 9))
 
+    def processVideo(self, backgroundVideoPath, videoDuration, audioDuration, startTime, newWidth, newHeight):
         video = ffmpeg.input(backgroundVideoPath)
 
         # Loop the video if it is shorter than the audio
-        if video_duration < audio_duration:
-            loops_needed = int(audio_duration // video_duration) + 1
-            videos = []
-            for i in range(loops_needed):
-                videos.append(video)
+        if videoDuration < audioDuration:
+            loopsNeeded = int(audioDuration // videoDuration) + 1
+            videos = [video for _ in range(loopsNeeded)]
             video = ffmpeg.concat(*videos, v=1, a=0)
 
-        audio = ffmpeg.input(ttsAudioPath)
-
-        # Trim the video to match the length of the audio
-        video = video.trim(start=start_time, end=start_time + audio_duration)
+        # Trim the video to match the length of the audio and crop to the desired aspect ratio
+        video = video.trim(start=startTime, end=startTime + audioDuration)
         video = video.setpts('PTS-STARTPTS')
 
-        # Crop the video to the desired aspect ratio
-        video = ffmpeg.filter_(video, 'crop', new_width, new_height)
+        # Crop the video to the desired aspect ratio if dimensions were calculated
+        if newWidth is not None and newHeight is not None:
+            video = ffmpeg.filter_(video, 'crop', newWidth, newHeight)
 
-        # Merge the video and audio together, and output to output_path
-        output = ffmpeg.output(video, audio, outputVideoPath)
+        return video
 
-        # Overwrite the output file if it exists
+    def mergeAudioVideo(self, video, audio, outputVideoPath):
+        vcodec = self.env['VCODEC']
+        numThreads = self.env['THREADS']
+        output = ffmpeg.output(video, audio, outputVideoPath,
+                               vcodec=vcodec, threads=numThreads)
         output = ffmpeg.overwrite_output(output)
-
-        # Run the ffmpeg command
         ffmpeg.run(output)
 
-        return outputVideoPath
+    def getRandomMP4(self, directory):
+        # Filter the list to include only .mp4 files
+        mp4Files = [entry.path for entry in os.scandir(
+            directory) if entry.is_file() and entry.name.endswith('.mp4')]
+
+        # Select a random .mp4 file
+        randomMP4 = random.choice(mp4Files)
+
+        return randomMP4
