@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from scraper import Scraper
 from tts import TTS
 from videoGen import VideoGenerator
+from forcedAligner import ForcedAligner
 import os
 from gpt import GPT
 
@@ -22,12 +23,19 @@ tts = TTS(env)
 audioFile = tts.createAudio(editedPost, gender)
 print("Created audio file: " + audioFile)
 
+if env['SUBTITLES'].upper() == 'TRUE':
+    subtitlesPath = 'tts-audio-files/subtitles.srt'
+    forcedAligner = ForcedAligner(
+        'http://localhost:32768', env)
+    forcedAligner.align(audioFile, editedPost, subtitlesPath)
+else:
+    subtitlesPath = None
 videoGen = VideoGenerator(env)
 directory = 'background-videos'
 outputPath = os.path.join('output', 'output.mp4')
 bgVideoFileName = env['BG_VIDEO_FILENAME']
 videoFile = videoGen.generateVideo(
-    bgVideoFileName, audioFile, outputPath, directory)
+    bgVideoFileName, 'tts-audio-files/speech.mp3', outputPath, directory, subtitlesPath)
 if (videoFile != False):
     print("Created output video file at: " + videoFile)
 else:

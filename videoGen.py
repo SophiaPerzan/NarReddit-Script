@@ -87,7 +87,11 @@ class VideoGenerator:
 
         # Add subtitles if provided
         if subtitlesPath is not None and os.path.isfile(subtitlesPath):
-            video = ffmpeg.filter_(video, 'subtitles', subtitlesPath)
+            # Set style for the subtitles
+            style = "FontName=Arial,FontSize=20,PrimaryColour=&H00ffffff,OutlineColour=&H00000000," \
+                    "BackColour=&H80000000,Bold=0,Italic=0,Alignment=10"
+            video = ffmpeg.filter_(
+                video, 'subtitles', subtitlesPath, force_style=style)
 
         return video
 

@@ -7,6 +7,7 @@ class ForcedAligner:
     def __init__(self, gentleUrl, env):
         self.gentleUrl = gentleUrl
         self.env = env
+        self.subtitleCharGroupSize = 10
 
     def align(self, audioPath, transcription, srtOutputPath):
         # Open the audio file
@@ -37,7 +38,7 @@ class ForcedAligner:
                     continue
 
                 wordLen = len(word['alignedWord'])
-                if phraseCharCount + wordLen <= 15:
+                if phraseCharCount + wordLen <= self.subtitleCharGroupSize:
                     phrase.append(word)
                     phraseCharCount += wordLen
                 else:
