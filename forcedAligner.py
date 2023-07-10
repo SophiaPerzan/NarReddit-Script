@@ -55,5 +55,21 @@ class ForcedAligner:
         endTime = timedelta(seconds=phrase[-1]['end'])
         words = [word['alignedWord'] for word in phrase]
         srtFile.write(f"{index}\n")
-        srtFile.write(f"{startTime} --> {endTime}\n")
+        srtFile.write(
+            f"{self.format_time(startTime)} --> {self.format_time(endTime)}\n")
         srtFile.write(' '.join(words) + "\n\n")
+
+    def format_time(self, td):
+        # Total seconds as a float
+        total_seconds = td.total_seconds()
+        # Hours
+        hours = int(total_seconds // 3600)
+        total_seconds %= 3600
+        # Minutes
+        minutes = int(total_seconds // 60)
+        total_seconds %= 60
+        # Seconds and milliseconds
+        seconds = int(total_seconds)
+        milliseconds = int(round((total_seconds - seconds) * 1000))
+        # Format and return
+        return f"{hours:02}:{minutes:02}:{seconds:02},{milliseconds:03d}"

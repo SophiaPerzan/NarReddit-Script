@@ -7,7 +7,7 @@ class VideoGenerator:
     def __init__(self, env):
         self.env = env
 
-    def generateVideo(self, backgroundVideoFileName, ttsAudioPath, outputVideoPath, directory):
+    def generateVideo(self, backgroundVideoFileName, ttsAudioPath, outputVideoPath, directory, subtitlesPath):
         backgroundVideoPath = self.getBackgroundVideoPath(
             backgroundVideoFileName, directory)
 
@@ -32,7 +32,7 @@ class VideoGenerator:
             newWidth, newHeight = self.getNewDimensions(videoStream)
 
         video = self.processVideo(
-            backgroundVideoPath, videoDuration, audioDuration, startTime, newWidth, newHeight)
+            backgroundVideoPath, videoDuration, audioDuration, startTime, newWidth, newHeight, subtitlesPath)
         audio = ffmpeg.input(ttsAudioPath)
 
         self.mergeAudioVideo(video, audio, outputVideoPath)
@@ -68,7 +68,7 @@ class VideoGenerator:
         else:  # narrower than 9:16, crop top and bottom
             return width, int(width * (16 / 9))
 
-    def processVideo(self, backgroundVideoPath, videoDuration, audioDuration, startTime, newWidth, newHeight):
+    def processVideo(self, backgroundVideoPath, videoDuration, audioDuration, startTime, newWidth, newHeight, subtitlesPath):
         video = ffmpeg.input(backgroundVideoPath)
 
         # Loop the video if it is shorter than the audio
@@ -84,6 +84,10 @@ class VideoGenerator:
         # Crop the video to the desired aspect ratio if dimensions were calculated
         if newWidth is not None and newHeight is not None:
             video = ffmpeg.filter_(video, 'crop', newWidth, newHeight)
+
+        # Add subtitles if provided
+        if subtitlesPath is not None and os.path.isfile(subtitlesPath):
+            video = ffmpeg.filter_(video, 'subtitles', subtitlesPath)
 
         return video
 
