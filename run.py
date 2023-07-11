@@ -26,7 +26,7 @@ print("Created audio file: " + audioFile)
 if env['SUBTITLES'].upper() == 'TRUE':
     subtitlesPath = 'tts-audio-files/subtitles.srt'
     forcedAligner = ForcedAligner(
-        'http://localhost:32768', env)
+        env['GENTLE_URL'], env)
     subtitleText = gpt.getSubtitles(editedPost)
     forcedAligner.align(audioFile, subtitleText, subtitlesPath)
 else:
