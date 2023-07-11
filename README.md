@@ -12,11 +12,13 @@ Create a new reddit app. You can do so at this link: <https://www.reddit.com/pre
 
 Select script from the radio button menu. Set the redirect uri to <http://localhost:8080>
 
-Create a .env file using the .env.template
+Get the gentle forced aligner <https://github.com/lowerquality/gentle> and start the server
 
 Create an elevenlabs account if you do not already have one
 
 Get an OpenAI API key
+
+Create a .env file using the .env.template
 
 Populate the .env variables
 
@@ -26,6 +28,4 @@ Populate the .env variables
 Run the script
 
 TODO:
-
--   Automated creation of subtitles to be added to the video
 -   Use GPT-4 for translation of content to other languages
