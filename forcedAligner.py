@@ -7,7 +7,7 @@ class ForcedAligner:
     def __init__(self, gentleUrl, env):
         self.gentleUrl = gentleUrl
         self.env = env
-        self.subtitleCharGroupSize = 10
+        self.subtitleCharGroupSize = 1
 
     def align(self, audioPath, transcription, srtOutputPath):
         # Open the audio file
@@ -38,14 +38,13 @@ class ForcedAligner:
                     continue
 
                 wordLen = len(word['alignedWord'])
-                if phraseCharCount + wordLen <= self.subtitleCharGroupSize:
-                    phrase.append(word)
-                    phraseCharCount += wordLen
-                else:
+                phraseCharCount += wordLen
+                phrase.append(word)
+                if phraseCharCount >= self.subtitleCharGroupSize:
                     self.writeSrtCue(srtFile, srtIndex, phrase)
                     srtIndex += 1
-                    phrase = [word]
-                    phraseCharCount = wordLen
+                    phrase = []
+                    phraseCharCount = 0
 
             # Write the final phrase, if any
             if phrase:

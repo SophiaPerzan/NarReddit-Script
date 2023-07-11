@@ -18,3 +18,8 @@ class GPT:
         instructions = "Given the following reddit post, edit it so that the abbreviations/acronyms are expanded, and correct grammar mistakes/correct for general ease of understanding. A text to speech program will use this as input, so make sure the output will be easily processed by the program. Add additional punctuation if necessary to make the speech flow better. You may leave commonly understood acronyms/abbreviations unexpanded."
         return openai.ChatCompletion.create(model=self.model, messages=[{"role": "system", "content": instructions},
                                                                         {"role": "user", "content": text}], temperature=0.1).choices[0].message.content
+
+    def getSubtitles(self, text):
+        instructions = "Given the following transcript, expand/convert all characters that are not letters, into the equivalent word/letter representation."
+        return openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "system", "content": instructions},
+                                                                             {"role": "user", "content": text}], temperature=0.1).choices[0].message.content

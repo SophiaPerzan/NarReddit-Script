@@ -27,7 +27,8 @@ if env['SUBTITLES'].upper() == 'TRUE':
     subtitlesPath = 'tts-audio-files/subtitles.srt'
     forcedAligner = ForcedAligner(
         'http://localhost:32768', env)
-    forcedAligner.align(audioFile, editedPost, subtitlesPath)
+    subtitleText = gpt.getSubtitles(editedPost)
+    forcedAligner.align(audioFile, subtitleText, subtitlesPath)
 else:
     subtitlesPath = None
 videoGen = VideoGenerator(env)
