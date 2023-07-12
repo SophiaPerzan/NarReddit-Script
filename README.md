@@ -26,6 +26,3 @@ Populate the .env variables
 -   NOTE: You will need an API key with access to gpt-4 in order to use it. Expect higher api costs if doing so.
 
 Run the script
-
-TODO:
--   Use GPT-4 for translation of content to other languages
