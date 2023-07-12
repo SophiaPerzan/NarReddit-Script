@@ -14,8 +14,14 @@ class GPT:
         return openai.ChatCompletion.create(model=self.model, messages=[{"role": "system", "content": instructions},
                                                                         {"role": "user", "content": text}], temperature=0.2).choices[0].message.content
 
-    def expandAcronymsAndAbbreviations(self, text):
-        instructions = "Given the following reddit post, edit it so that the abbreviations/acronyms are expanded, and correct grammar mistakes/correct for general ease of understanding. A text to speech program will use this as input, so make sure the output will be easily processed by the program. Add additional punctuation if necessary to make the speech flow better. You may leave commonly understood acronyms/abbreviations unexpanded."
+    def expandAcronymsAndAbbreviations(self, text, language="english"):
+        sharedInstructions = "edit it so that the abbreviations/acronyms are expanded, and correct grammar mistakes/correct for general ease of understanding. A text to speech program will use this as input, so make sure the output will be easily processed by the program. Add additional punctuation if necessary to make the speech flow better. You may leave commonly understood acronyms/abbreviations unexpanded."
+        if language != "english":
+            instructions = "Translate the following reddit post to " + \
+                language+", then "+sharedInstructions + \
+                " Then expand/convert all characters that are not letters, into the equivalent word/letter representation in the target language."
+        else:
+            instructions = "Given the following reddit post, "+sharedInstructions
         return openai.ChatCompletion.create(model=self.model, messages=[{"role": "system", "content": instructions},
                                                                         {"role": "user", "content": text}], temperature=0.1).choices[0].message.content
 
