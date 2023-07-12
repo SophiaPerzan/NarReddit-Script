@@ -4,11 +4,16 @@ NarrReddit is a script that automates the process of converting top-rated Reddit
 
 ## Features
 
-- Scrapes a chosen subreddit for the highest-rated post.
-- Generates Text-to-Speech (TTS) audio from the post.
-- Creates subtitles for the audio.
-- Overlays the generated audio and subtitles onto a selected background video.
-- Supports translation into multiple languages.
+- **Content Generation**: NarrReddit uses GPT-4 to enhance and translate Reddit posts, enabling the creation of multilingual content.
+
+- **Reddit Scraping**: The script scrapes your chosen subreddit to find the highest-rated post.
+
+- **Intelligent Text-to-Speech (TTS) Audio Generation**: NarrReddit generates TTS audio from the post, intelligently determining the speaker's gender and adjusting the TTS voice accordingly.
+
+- **Subtitles Creation**: NarrReddit can also create subtitles for the generated audio.
+
+- **Video Overlays**: The script overlays the generated audio and subtitles onto a selected background video, creating a complete, ready-to-upload video.
+
 
 ## Setup
 
