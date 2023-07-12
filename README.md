@@ -1,31 +1,37 @@
 # NarrReddit
 
-An script which automates the process of turning the top reddit posts from a given subreddit into a subway surfers style tiktok narration
+NarrReddit is a script that automates the process of converting top-rated Reddit posts into engaging, Subway Surfers-style TikTok narrations. It supports translation into multiple languages, enabling you to transform a single trending Reddit post into multilingual video content, all in an automated fashion!
+
+## Features
+
+- Scrapes a chosen subreddit for the highest-rated post.
+- Generates Text-to-Speech (TTS) audio from the post.
+- Creates subtitles for the audio.
+- Overlays the generated audio and subtitles onto a selected background video.
+- Supports translation into multiple languages.
 
 ## Setup
 
-Install dependencies by running `pip install -r requirements.txt`
+Follow these steps to set up NarrReddit:
 
-Put a video files to be used for the background in the background-videos directory.
+1. Install the required dependencies by running `pip install -r requirements.txt`.
 
-Create a new reddit app. You can do so at this link: <https://www.reddit.com/prefs/apps>
+2. Place your preferred video files to be used as backgrounds in the `background-videos` directory.
 
-Select script from the radio button menu. Set the redirect uri to <http://localhost:8080>
+3. Create a new Reddit application at this [link](https://www.reddit.com/prefs/apps). Choose 'script' from the radio button menu and set the redirect URI to `http://localhost:8080`.
 
-Get the gentle forced aligner <https://github.com/lowerquality/gentle> and start the server
+4. Set up the [Gentle forced aligner](https://github.com/lowerquality/gentle) and start the server.
 
-Create an elevenlabs account if you do not already have one
+5. Sign up for an Elevenlabs account if you don't have one already.
 
-Get an OpenAI API key
+6. Obtain an OpenAI API key.
 
-Create a .env file using the .env.template
+7. Create a `.env` file using the `.env.template` provided in the repository.
 
-Populate the .env variables
+8. Populate the `.env` variables as per your requirements.
 
--   NOTE: You can filter posts by character limit in the .env file. It is recommended to set them to something other than the defaults as otherwise you may burn through your elevenlabs API char limit very quickly.
--   NOTE: You will need an API key with access to gpt-4 in order to use it. Expect higher api costs if doing so.
+   - **Note**: You can adjust the character limit for posts in the `.env` file. It's advisable to use a limit other than the defaults to avoid exhausting your Elevenlabs API character limit too quickly.
+   
+   - **Note**: You'll need an API key with access to GPT-4 for this feature. Bear in mind that using GPT-4 may result in higher API costs.
 
-Run the script
-
-TODO:
--   Use GPT-4 for translation of content to other languages
+9. Run the script to start creating engaging video content from top-rated Reddit posts!
