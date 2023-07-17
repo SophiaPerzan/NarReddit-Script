@@ -1,23 +1,23 @@
-# NarrReddit
+# NarReddit
 
-NarrReddit is a script that automates the process of converting top-rated Reddit posts into engaging, Subway Surfers-style TikTok narrations. It supports translation into multiple languages, enabling you to transform a single trending Reddit post into multilingual video content, all in an automated fashion!
+NarReddit is a script that automates the process of converting top-rated Reddit posts into engaging, Subway Surfers-style TikTok narrations. It supports translation into multiple languages, enabling you to transform a single trending Reddit post into multilingual video content, all in an automated fashion!
 
 ## Features
 
-- **Content Generation**: NarrReddit uses GPT-4 to enhance and translate Reddit posts, enabling the creation of multilingual content.
+- **Content Generation**: NarReddit uses GPT-4 to enhance and translate Reddit posts, enabling the creation of multilingual content.
 
 - **Reddit Scraping**: The script scrapes your chosen subreddit to find the highest-rated post.
 
-- **Intelligent Text-to-Speech (TTS) Audio Generation**: NarrReddit generates TTS audio from the post, intelligently determining the speaker's gender and adjusting the TTS voice accordingly.
+- **Intelligent Text-to-Speech (TTS) Audio Generation**: NarReddit generates TTS audio from the post, intelligently determining the speaker's gender and adjusting the TTS voice accordingly.
 
-- **Subtitles Creation**: NarrReddit can also create subtitles for the generated audio.
+- **Subtitles Creation**: NarReddit can also create subtitles for the generated audio.
 
 - **Video Overlays**: The script overlays the generated audio and subtitles onto a selected background video, creating a complete, ready-to-upload video.
 
 
 ## Setup
 
-Follow these steps to set up NarrReddit:
+Follow these steps to set up NarReddit:
 
 1. Install ffmpeg and make it accessible via the $PATH environment variable. [More information](https://github.com/kkroening/ffmpeg-python#installation)
 
