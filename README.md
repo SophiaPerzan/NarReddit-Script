@@ -14,6 +14,9 @@ NarReddit is a script that automates the process of converting top-rated Reddit 
 
 - **Video Overlays**: The script overlays the generated audio and subtitles onto a selected background video, creating a complete, ready-to-upload video.
 
+## Web Alternative: NarReddit Alpha
+
+Setting up NarReddit locally can be a hassle. From the challenge of obtaining a GPT-4 access to dealing with configurations and dependencies, there's a lot to manage. If you want a smoother experience, why not try the web alternative? We are excited to introduce [NarReddit Alpha](http://narreddit.com) – a web app that offers the same functionality without the setup complexities. It's currently in alpha, but give it a whirl and enjoy the convenience of online NarReddit!
 
 ## Setup
 
