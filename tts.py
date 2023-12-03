@@ -7,19 +7,22 @@ class TTS:
         self.env = env
         set_api_key(env['ELEVENLABS_API_KEY'])
         self.voices = voices()
-        self.Paola = self.findVoice(self.voices, "Paola")
-        self.Arthur = self.findVoice(self.voices, "Arthur")
+        # if these voice names don't exist in your ElevenLabs account, then this script will fail here
+        # Paola and Arthur unfortunately did not exist for me, that's why I changed them to Rachel and Adam, who are default voices
+        self.Female = self.findVoice(self.voices, "Rachel")
+        self.Male = self.findVoice(self.voices, "Adam")
 
     def findVoice(self, voices, name):
         for voice in voices:
+            print(voice.name)
             if voice.name == name:
                 return voice
         return None
 
     def createAudio(self, text, gender, language="english"):
-        voice = self.Paola
+        voice = self.Female
         if gender == "M":
-            voice = self.Arthur
+            voice = self.Male
         if language == "english":
             audio = generate(
                 text, voice=voice, model="eleven_monolingual_v1")
