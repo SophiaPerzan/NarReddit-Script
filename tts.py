@@ -14,15 +14,17 @@ class TTS:
 
     def findVoice(self, voices, name):
         for voice in voices:
-            print(voice.name)
             if voice.name == name:
                 return voice
         return None
 
-    def createAudio(self, text, gender, language="english"):
+    def createAudio(self, text, gender, language="english", selected_voice_name=None):
+        user_selected_voice = self.findVoice(self.voices, selected_voice_name)
         voice = self.Female
         if gender == "M":
             voice = self.Male
+        if user_selected_voice != None:
+            voice = user_selected_voice
         if language == "english":
             audio = generate(
                 text, voice=voice, model="eleven_monolingual_v1")
