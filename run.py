@@ -6,6 +6,14 @@ from videoGen import VideoGenerator
 from forcedAligner import ForcedAligner
 import os
 from gpt import GPT
+import argparse
+
+# parsing the ElevenLabs Voice Name
+parser = argparse.ArgumentParser(description='Generate Short-Form Videos from Reddit Posts')
+parser.add_argument('--voice', type=str, help='Name of ElevenLabs Voice to use')
+args = parser.parse_args()
+voice = args.voice if args.voice else None
+
 
 load_dotenv()
 
@@ -25,7 +33,7 @@ for language in languages:
     editedPost = gpt.expandAcronymsAndAbbreviations(postTitleAndText, language)
 
     tts = TTS(env)
-    audioFile = tts.createAudio(editedPost, gender, language)
+    audioFile = tts.createAudio(editedPost, gender, language, voice)
     print("Created audio file: " + audioFile)
 
     if env['SUBTITLES'].upper() == 'TRUE' and language == 'english':
